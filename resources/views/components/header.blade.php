@@ -10,8 +10,8 @@
     @if (auth()->check())
 
     @else
-        <a href="#" class="text-[#F06292] font-medium text-lg md:text-xl">Sign In</a>
-        <a href="#" class="text-white font-medium text-lg md:text-xl px-4 py-2 rounded-full bg-[#E91E63]">Sign Up</a>
+        <a href="{{route('login_page')}}" class="text-[#F06292] font-medium text-lg md:text-xl">Sign In</a>
+        <a href="{{route('register_page')}}" class="text-white font-medium text-lg md:text-xl px-4 py-2 rounded-full bg-[#E91E63]">Sign Up</a>
     @endif
   </div>
 </nav>
