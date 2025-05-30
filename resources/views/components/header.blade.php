@@ -27,9 +27,12 @@
         >
             <ul class="py-2">
             <li>
+                <form method="POST" action="{{ route('logout') }}" id="logout-form">
+                @csrf
                 <a
-                href="#"
-                class="block px-4 py-2 text-sm text-[#E91E63] hover:bg-pink-100 transition"
+                    href="{{ route('logout') }}"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                    class="block px-4 py-2 text-sm text-[#E91E63] hover:bg-pink-100 transition"
                 >
                 Log Out
                 </a>
