@@ -2,7 +2,7 @@
   <div class="flex flex-wrap items-center gap-1 md:gap-20">
     <h1 class="text-[#E91E63] text-3xl md:text-5xl font-bold">Sweet Shop</h1>
     <div class="flex gap-4 md:gap-20">
-      <a href="/" class="text-[#F06292] text-xl md:text-3xl font-bold">Home</a>
+      <a href="{{route('home_page')}}" class="text-[#F06292] text-xl md:text-3xl font-bold">Home</a>
       <a href="#" class="text-[#F8BBD0] text-xl md:text-3xl font-bold">List Product</a>
     </div>
   </div>
