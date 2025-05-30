@@ -22,7 +22,7 @@
             <div class="flex flex-col w-full max-w-md gap-10">
                 <h1 class="text-[#E91E63] text-3xl md:text-5xl font-bold">Sign In</h1>
 
-                <form class="space-y-6">
+                <form method="POST" action="{{ url('/login') }}" class="space-y-6"><form class="space-y-6">
                     @csrf
                     <div class="relative">
                         <div class="relative">

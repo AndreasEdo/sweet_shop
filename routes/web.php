@@ -1,5 +1,5 @@
 <?php
-use App\Http\Controllers\AuthController;
+
 use App\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
@@ -8,14 +8,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/login', [AuthController::class, 'login'])->name('login_page');
-Route::get('/register', [AuthController::class, 'register'])->name('register_page');
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
-    ->name('login');
+    ->middleware('guest')
+    ->name('login_page');
 
-Route::get('/login', [AuthenticatedSessionController::class, 'store']);
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+    ->middleware('guest');
 
 Route::get('/register', [RegisteredUserController::class, 'create'])
-    ->name('register');
+    ->middleware('guest')
+    ->name('register_page');
 
-Route::get('/register', [RegisteredUserController::class, 'store']);
+Route::post('/register', [RegisteredUserController::class, 'store'])
+    ->middleware('guest');
+
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('logout');
+?>
