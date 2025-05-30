@@ -18,7 +18,7 @@ class AuthenticatedSessionController extends Controller{
             'password' => ['required', 'string'],
         ]);
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (Auth::attempt($credentials, $request->boolean('remember-me'))) {
             $request->session()->regenerate();
 
             return redirect()->intended('/');

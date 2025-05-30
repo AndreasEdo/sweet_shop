@@ -1,5 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+@if ($errors->any() && !$errors->has('email'))
+    <div class="mb-4 p-4 bg-red-100 text-red-700 border border-red-400 rounded">
+        <div class="font-bold">Whoops! Something went wrong.</div>
+        <ul class="mt-3 list-disc list-inside text-sm">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +32,7 @@
             <div class="flex flex-col w-full max-w-md gap-10">
                 <h1 class="text-[#E91E63] text-3xl md:text-5xl font-bold">Sign In</h1>
 
-                <form method="POST" action="{{ url('/login') }}" class="space-y-6"><form class="space-y-6">
+                <form method="POST" action="{{ route('login_page') }}" class="space-y-6">
                     @csrf
                     <div class="relative">
                         <div class="relative">
@@ -36,8 +46,13 @@
                                 name="email"
                                 class="text-[#F0629280] font-medium pl-10 block w-full px-4 py-2 rounded-3xl shadow-sm border-0 bg-[#F8BBD052] focus:outline-none focus:ring-2 focus:ring-[#F06292]"
                                 placeholder="your@email.com"
+                                value="{{ old('email') }}"
                                 required
+                                autofocus
                             >
+                        @error('email')
+                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        @enderror
                         </div>
                     </div>
 
@@ -53,7 +68,7 @@
                                 type="password"
                                 id="password"
                                 name="password"
-                                class="text-[#F0629280] font-medium pl-10 block w-full px-4 py-2 rounded-3xl shadow-sm border-0 bg-[#F8BBD052] focus:outline-none focus:ring-2 focus:ring-[#F06292]"
+                                class="text-[#F0629280] font-medium pl-10 block w-full px-4 py-2 rounded-3xl shadow-sm border-0 bg-[#F8BBD052] focus:outline-none focus:ring-2 focus:ring-[#F06292] @error('email') border-red-500 @enderror"
                                 placeholder="Password"
                                 required
                             >
@@ -73,7 +88,7 @@
                         </div>
 
                         <div class="text-sm">
-                            <a href="#" class="font-medium text-[#E91E63] hover:text-[#E91E63]">Forgot password?</a>
+                            <a href="{{ route('password.request') }}" class="font-medium text-[#E91E63] hover:text-[#E91E63]">Forgot password?</a>
                         </div>
                     </div>
 
