@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateAdminRequest;
 
 class AdminController extends Controller
 {
+    protected $guard;
     /**
      * Display a listing of the resource.
      */
