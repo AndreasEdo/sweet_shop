@@ -30,4 +30,10 @@ class Product extends Model
     public function order_detail(){
         return $this->belongsToMany(OrderDetail::class);
     }
+
+    public function promoProduct()
+    {
+        return $this->hasOne(PromoProduct::class);
+    }
+
 }
