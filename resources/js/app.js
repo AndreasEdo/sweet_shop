@@ -25,3 +25,4 @@ eyeIcon2.addEventListener('click', () => {
     eyeIcon2.classList.add("fa-eye");
   }
 });
+

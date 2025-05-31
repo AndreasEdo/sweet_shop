@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Http\Requests\StoreCartRequest;
 use App\Http\Requests\UpdateCartRequest;
+use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Product;
 
 class CartController extends Controller
 {
@@ -27,9 +30,30 @@ class CartController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCartRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1'
+        ]);
+
+        $user = auth()->user();
+        $existingCart = Cart::where('user_id', $user->id)
+                      ->where('product_id', $validated['product_id'])
+                      ->first();
+
+        if ($existingCart) {
+            $existingCart->increment('quantity', $validated['quantity']);
+        } else {
+
+            Cart::create([
+                'user_id' => $user->id,
+                'product_id' => $validated['product_id'],
+                'quantity' => $validated['quantity'],
+            ]);
+        }
+
+        return redirect()->route('home_page')->with('success', 'Product added to cart successfully!');
     }
 
     /**

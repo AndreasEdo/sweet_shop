@@ -15,6 +15,7 @@ class Product extends Model
         'description',
         'price',
         'stock',
+        'type',
         'image'
     ];
 
@@ -22,11 +23,18 @@ class Product extends Model
         return $this->hasMany(Review::class);
     }
 
-    public function cart(){
-        return $this->belongsToMany(Cart::class);
+    public function cart()
+    {
+        return $this->hasMany(Cart::class);
     }
 
     public function order_detail(){
         return $this->belongsToMany(OrderDetail::class);
     }
+
+    public function promoProduct()
+    {
+        return $this->hasOne(PromoProduct::class);
+    }
+
 }

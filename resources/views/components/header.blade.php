@@ -1,8 +1,8 @@
-<nav class="w-full flex flex-wrap justify-between bg-white mt-8 p-4">
+<nav class="w-full flex flex-wrap justify-between bg-white p-4">
   <div class="flex flex-wrap items-center gap-1 md:gap-20">
     <h1 class="text-[#E91E63] text-3xl md:text-5xl font-bold">Sweet Shop</h1>
     <div class="flex gap-4 md:gap-20">
-      <a href="/" class="text-[#F06292] text-xl md:text-3xl font-bold">Home</a>
+      <a href="{{route('home_page')}}" class="text-[#F06292] text-xl md:text-3xl font-bold">Home</a>
       <a href="#" class="text-[#F8BBD0] text-xl md:text-3xl font-bold">List Product</a>
     </div>
   </div>
@@ -26,6 +26,9 @@
             class="absolute left-0 mt-2 w-full bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 group-hover:visible invisible transition-all duration-300 z-50"
         >
             <ul class="py-2">
+                <li>
+                    <a href="#" class="block px-4 py-2 text-sm text-[#E91E63] hover:bg-pink-100 transition">Cart</a>
+                </li>
             <li>
                 <form method="POST" action="{{ route('logout') }}" id="logout-form">
                 @csrf
