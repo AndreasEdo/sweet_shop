@@ -14,13 +14,6 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
-        $slides = PromoProduct::all();
-
-        $singles = $products->where('type', 'single')->take(5);
-        $others = $products->where('type', '!=', 'single')->take(5);
-
-        return view('welcome', compact('singles', 'others', 'slides'));
     }
 
     /**

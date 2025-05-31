@@ -1,10 +1,13 @@
 <div class="relative bg-white shadow-md rounded-lg p-4 h-6/7 grid grid-rows-[20fr_1fr]">
     <div class="items text-center text-4xl font-bold flex items-center justify-center relative overflow-hidden h-full">
         @foreach ($promos as $index => $promo)
-            <img
-                class="item {{ $index !== 0 ? 'hidden' : '' }} "
-                src="{{ asset('storage/image/' . $promo->image) }}"
-                alt="Promo Image {{ $index + 1 }}">
+            <a href="">
+                <img
+                    class="item {{ $index !== 0 ? 'hidden' : '' }} "
+                    src="{{ asset('storage/image/' . $promo->image) }}"
+                    alt="Promo Image {{ $index + 1 }}">
+            </a>
+
         @endforeach
     </div>
 

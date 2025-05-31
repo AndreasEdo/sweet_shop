@@ -14,8 +14,8 @@ class PromoProductController extends Controller
      */
     public function index()
     {
-        $promos =  PromoProduct::with('product')->get();
-        $products = Product::whereHas('promoProduct')->with('promoProduct')->get();;
+        $promos = PromoProduct::with('product')->get();
+
         $promos->map(function($promo) {
             $hargaAwal = $promo->product->price;
             $diskon = $promo->promo;
@@ -24,8 +24,37 @@ class PromoProductController extends Controller
             return $promo;
         });
 
-        $singles = $products->where('type', 'single')->take(5);
-        $others = $products->where('type', '!=', 'single')->take(5);
+        // Ambil promo produk dengan tipe 'single'
+        $singles = PromoProduct::with('product')
+            ->whereHas('product', function($query) {
+                $query->where('type', 'single');
+            })
+            ->take(5)
+            ->get();
+
+        // Hitung harga setelah diskon untuk $singles
+        $singles->map(function($promo) {
+            $hargaAwal = $promo->product->price;
+            $diskon = $promo->promo;
+            $hargaDiskon = $hargaAwal * (1 - $diskon / 100);
+            $promo->price_after_discount = $hargaDiskon;
+            return $promo;
+        });
+
+        $others = PromoProduct::with('product')
+            ->whereHas('product', function($query) {
+                $query->where('type', '!=', 'single');
+            })
+            ->take(5)
+            ->get();
+
+        $others->map(function($promo) {
+            $hargaAwal = $promo->product->price;
+            $diskon = $promo->promo;
+            $hargaDiskon = $hargaAwal * (1 - $diskon / 100);
+            $promo->price_after_discount = $hargaDiskon;
+            return $promo;
+        });
 
         return view('welcome', compact('promos', 'singles', 'others'));
     }
