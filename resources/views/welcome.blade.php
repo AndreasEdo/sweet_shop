@@ -16,11 +16,28 @@
                 <h1 class="text-[#E91E63] text-xl md:text-3xl font-bold">Flower Bouquet</h1>
                 <div class="grid grid-cols-5 grid-rows-1 gap-4 h-full">
                     @foreach ($others as $promo)
-                        <div class="w-full bg-[#F8BBD052] rounded-3xl h-5/6 grid grid-rows-[1fr_2fr]">
+                        <div class="w-full bg-[#F8BBD052] rounded-3xl h-5/6 grid grid-rows-[1fr_2fr] relative">
                             <img src="{{asset('storage/'. $promo->product->image)}}" alt="">
-                            <div class="p-6 flex flex-col justify-between ">
+                            @if (auth()->check())
+                                <a href="#" class="transition-all absolute group top-5 right-0 w-1/7 h-16 bg-amber-200 absolute rounded-l-3xl flex items-center justify-around font-bold text-black cursor-pointer hover:w-2/6">
+                                    <img src="{{asset('assets/images/cart.png')}}" class="absolute w-1/2 h-1/3 group-hover:relative group-hover:w-1/4" alt="Cart Icon">
+                                    <h1 class="invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity duration-[300ms] ease-in fade-out-instant">
+                                        Add
+                                    </h1>
+                                </a>
+                            @else
+                                <a href="{{route('login_page')}}" class="transition-all absolute group top-5 right-0 w-1/7 h-16 bg-amber-200 absolute rounded-l-3xl flex items-center justify-around font-bold text-black cursor-pointer hover:w-2/6">
+                                    <img src="{{asset('assets/images/cart.png')}}" class="absolute w-1/2 h-1/3 group-hover:relative group-hover:w-1/4" alt="Cart Icon">
+                                    <h1 class="invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity duration-[300ms] ease-in fade-out-instant">
+                                        Add
+                                    </h1>
+                                </a>
+                            @endif
+
+                            <div class="p-6 flex flex-col justify-between relative">
                                 <h2 class="text-[#E91E63] text-2xl font-bold">{{$promo->product->name}}</h2>
                                 <div class="flex justify-between text-[#F06292] text-xs relative">
+
                                     <div>
                                         <div class="flex gap-1">
                                             <h3 class="text-xl font-bold line-through">{{ 'Rp ' . number_format($promo->product->price, 0, ',', '.') }}</h3>
@@ -42,11 +59,28 @@
                 <h1 class="text-[#E91E63] text-xl md:text-3xl font-bold">Single Flower</h1>
                 <div class="grid grid-cols-5 grid-rows-1 gap-4 h-full">
                     @foreach ($singles as $promo)
-                        <div class="w-full bg-[#F8BBD052] rounded-3xl h-5/6 grid grid-rows-[1fr_2fr]">
+                        <div class="w-full bg-[#F8BBD052] rounded-3xl h-5/6 grid grid-rows-[1fr_2fr] relative">
                             <img src="{{asset('storage/'. $promo->product->image)}}" alt="">
-                            <div class="p-6 flex flex-col justify-between ">
+                            @if (auth()->check())
+                                <a href="#" class="transition-all absolute group top-5 right-0 w-1/7 h-16 bg-amber-200 absolute rounded-l-3xl flex items-center justify-around font-bold text-black cursor-pointer hover:w-2/6">
+                                    <img src="{{asset('assets/images/cart.png')}}" class="absolute w-1/2 h-1/3 group-hover:relative group-hover:w-1/4" alt="Cart Icon">
+                                    <h1 class="invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity duration-[300ms] ease-in fade-out-instant">
+                                        Add
+                                    </h1>
+                                </a>
+                            @else
+                                <a href="{{route('login_page')}}" class="transition-all absolute group top-5 right-0 w-1/7 h-16 bg-amber-200 absolute rounded-l-3xl flex items-center justify-around font-bold text-black cursor-pointer hover:w-2/6">
+                                    <img src="{{asset('assets/images/cart.png')}}" class="absolute w-1/2 h-1/3 group-hover:relative group-hover:w-1/4" alt="Cart Icon">
+                                    <h1 class="invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity duration-[300ms] ease-in fade-out-instant">
+                                        Add
+                                    </h1>
+                                </a>
+                            @endif
+
+                            <div class="p-6 flex flex-col justify-between relative">
                                 <h2 class="text-[#E91E63] text-2xl font-bold">{{$promo->product->name}}</h2>
                                 <div class="flex justify-between text-[#F06292] text-xs relative">
+
                                     <div>
                                         <div class="flex gap-1">
                                             <h3 class="text-xl font-bold line-through">{{ 'Rp ' . number_format($promo->product->price, 0, ',', '.') }}</h3>
