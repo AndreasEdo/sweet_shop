@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
@@ -12,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PromoProductController::class, 'index'])->name('home_page');
 Route::post('/cart/add', [CartController::class, 'store'])->name('cart.add')->middleware('auth');
 
+
+Route::middleware('auth:admin')->get('/admin/index', function () {
+    return view('/admin/index');
+})->name('admin.dashboard');
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
     ->middleware('guest')

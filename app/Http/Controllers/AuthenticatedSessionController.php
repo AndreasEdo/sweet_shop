@@ -18,7 +18,12 @@ class AuthenticatedSessionController extends Controller{
             'password' => ['required', 'string'],
         ]);
 
-        if (Auth::attempt($credentials, $request->boolean('remember-me'))) {
+        if (Auth::guard('admin')->attempt($credentials, $request->boolean('remember-me'))) {
+            $request->session()->regenerate();
+            return redirect()->intended(route('admin.dashboard'));
+        }
+
+        if (Auth::guard('web')->attempt($credentials, $request->boolean('remember-me'))) {
             $request->session()->regenerate();
 
             return redirect()->intended('/');
@@ -31,7 +36,11 @@ class AuthenticatedSessionController extends Controller{
 
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
+        if (Auth::guard('admin')->check()) {
+            Auth::guard('admin')->logout();
+        } else {
+            Auth::guard('web')->logout();
+        }
 
         $request->session()->invalidate();
 
