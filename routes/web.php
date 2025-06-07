@@ -15,9 +15,25 @@ Route::get('/', [PromoProductController::class, 'index'])->name('home_page');
 Route::post('/cart/add', [CartController::class, 'store'])->name('cart.add')->middleware('auth');
 
 
-Route::middleware('auth:admin')->get('/admin/index', function () {
-    return view('/admin/index');
-})->name('admin.dashboard');
+Route::middleware('auth:admin')->get('/admin/index', [ProductController::class, 'index'])->name('admin.dashboard');
+Route::get('sweets/{product}/edit', [ProductController::class, 'edit'])
+    ->middleware('auth:admin')
+    ->name('product.edit');
+
+Route::get('sweets/create', [ProductController::class, 'create'])
+    ->middleware('auth:admin')
+    ->name('product.add');
+
+Route::post('/sweets', [ProductController::class, 'store'])
+    ->name('product.store')
+    ->middleware('auth:admin');
+
+Route::put('/sweets/{product}', [ProductController::class, 'update'])->name('product.update')->middleware('auth:admin');
+
+Route::delete('/sweets/{product}', [ProductController::class, 'destroy'])
+    ->middleware('auth:admin')
+    ->name('product.destroy');
+
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
     ->middleware('guest')
@@ -34,8 +50,9 @@ Route::post('/register', [RegisteredUserController::class, 'store'])
     ->middleware('guest');
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->middleware('auth')
+    ->middleware(['auth:web,admin'])
     ->name('logout');
+
 
     Route::get('/forgot-password', [ForgotPasswordController::class, 'create'])
     ->middleware('guest')
