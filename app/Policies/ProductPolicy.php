@@ -2,9 +2,11 @@
 
 namespace App\Policies;
 
+use App\Models\Admin;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class ProductPolicy
 {
@@ -32,20 +34,14 @@ class ProductPolicy
         return false;
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Product $product): bool
+    public function update(Authenticatable $user, Product $product): bool
     {
-        return false;
+        return $user instanceof \App\Models\Admin ;
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Product $product): bool
+    public function delete(Admin $admin, Product $product)
     {
-        return false;
+        return $admin->role === 'admin';
     }
 
     /**

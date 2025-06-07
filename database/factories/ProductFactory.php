@@ -21,7 +21,7 @@ class ProductFactory extends Factory
             'description' => $this->faker->sentence(10),
             'price' => $this->faker->numberBetween(10000, 100000),
             'stock' => $this->faker->numberBetween(1, 100),
-            'type' => $this->faker->randomElement(['bouquet', 'single']),
+            'type' => $this->faker->randomElement(['Bouquet', 'Single']),
             'image' => 'image/default.png',
         ];
     }
