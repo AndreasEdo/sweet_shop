@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PromoProductController::class, 'index'])->name('home_page');
 Route::post('/cart/add', [CartController::class, 'store'])->name('cart.add')->middleware('auth');
+Route::get('/products', [ProductController::class, 'showProducts'])->name('products.index');
 
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])

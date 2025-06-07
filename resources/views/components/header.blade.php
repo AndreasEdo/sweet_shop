@@ -3,7 +3,7 @@
     <h1 class="text-[#E91E63] text-3xl md:text-5xl font-bold">Sweet Shop</h1>
     <div class="flex gap-4 md:gap-20">
       <a href="{{route('home_page')}}" class="text-[#F06292] text-xl md:text-3xl font-bold">Home</a>
-      <a href="#" class="text-[#F8BBD0] text-xl md:text-3xl font-bold">List Product</a>
+      <a href="{{ route('products.index') }}" class="text-[#F06292] text-xl md:text-3xl font-bold">List Product</a>
     </div>
   </div>
   <div class="flex items-center gap-4 md:gap-6 mt-4 md:mt-0">
