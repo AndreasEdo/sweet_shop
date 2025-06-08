@@ -53,7 +53,7 @@ class CartController extends Controller
             ]);
         }
 
-        return redirect()->route('home_page')->with('success', 'Product added to cart successfully!');
+        return redirect()->back()->with('success', 'Product added to cart successfully!');
     }
 
     /**

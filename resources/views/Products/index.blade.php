@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Our Products - Sweet Shop</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/carousel.js', 'resources/js/hiddenform.js'])
 </head>
 <body class="w-full bg-white">
     <x-header/>
@@ -57,9 +57,14 @@
                                 <p class="text-gray-400 text-xs flex-grow leading-relaxed">Anniversary, Valentine's Day, Mother's Day, surprise gift, or any other loving moment.</p>
                                 <p class="text-2xl font-bold text-[#E91E63] my-4">{{ 'Rp ' . number_format($product->price, 0, ',', '.') }}</p>
                                 <div class="grid grid-cols-2 gap-3 mt-auto">
-                                    <button class="w-full bg-[#E91E63] text-white py-3 rounded-lg font-semibold hover:bg-pink-700 transition">Add To Cart</button>
-                                    <button class="w-full bg-white text-[#E91E63] py-3 rounded-lg font-semibold border-2 border-[#E91E63] hover:bg-pink-50 transition">Detail Product</button>
+                                    @if (auth()->check())
+                                        <a href="javascript:void(0)" data-product-id="{{ $product->id }}" class="add-to-cart w-full bg-[#E91E63] text-white py-3 rounded-lg font-semibold text-center hover:bg-pink-700 transition">Add To Cart</a>
+                                    @else
+                                        <a href="{{ route('login_page') }}" class="w-full bg-[#E91E63] text-white py-3 rounded-lg font-semibold text-center hover:bg-pink-700 transition">Add To Cart</a>
+                                    @endif
+                                    <a href="#" class="w-full bg-white text-[#E91E63] py-3 rounded-lg font-semibold border-2 border-[#E91E63] text-center hover:bg-pink-50 transition">Detail Product</a>
                                 </div>
+
                             </div>
                         </div>
                     @endforeach
@@ -92,5 +97,15 @@
 
     </main>
     <x-footer/>
+        <form id="cartForm" action="{{ route('cart.add') }}" method="POST" style="display: none;">
+        @csrf
+        <input type="hidden" name="product_id" id="product_id">
+        <input type="hidden" name="quantity" value="1">
+    </form>
+    <script>
+        window.cartAddRoute = "{{ route('cart.add') }}";
+        window.csrfToken = "{{ csrf_token() }}";
+    </script>
+
 </body>
 </html>
