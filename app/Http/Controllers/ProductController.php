@@ -3,13 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Http\Requests\StoreProductRequest;
 use Illuminate\Http\Request;
-use App\Http\Requests\UpdateProductRequest;
-use App\Models\PromoProduct;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 
 class ProductController extends Controller
 {
@@ -20,9 +17,47 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::latest()->paginate(5);
-
         return view('/admin/index', ['products' =>  $products]);
     }
+
+    public function showProducts(Request $request)
+    {
+        $query = Product::query();
+
+
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('description', 'like', '%' . $request->search . '%');
+            });
+        }
+
+
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+
+        switch ($request->get('sort')) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $products = $query->get();
+        $groupedProducts = $products->groupBy('type');
+        $allTypes = Product::select('type')->distinct()->pluck('type');
+
+        return view('products.index', compact('groupedProducts', 'allTypes'));
+    }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -35,6 +70,7 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(StoreProductRequest $request)
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -69,6 +105,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        return view('products.show', compact('product'));
     }
 
     /**
@@ -80,13 +117,12 @@ class ProductController extends Controller
         return view('/sweets/edit', compact('product'));
     }
 
-
     /**
      * Update the specified resource in storage.
      */
+    // public function update(UpdateProductRequest $request, Product $product)
     public function update(Request $request, Product $product)
     {
-
         $data = $request->all();
 
         if ($request->hasFile('image')) {

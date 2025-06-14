@@ -1,9 +1,7 @@
 <?php
 
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
@@ -13,27 +11,19 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PromoProductController::class, 'index'])->name('home_page');
 Route::post('/cart/add', [CartController::class, 'store'])->name('cart.add')->middleware('auth');
+Route::get('/products', [ProductController::class, 'showProducts'])->name('products.index');
+Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 
 
-Route::middleware('auth:admin')->get('/admin/index', [ProductController::class, 'index'])->name('admin.dashboard');
-Route::get('sweets/{product}/edit', [ProductController::class, 'edit'])
-    ->middleware('auth:admin')
-    ->name('product.edit');
+Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
 
-Route::get('sweets/create', [ProductController::class, 'create'])
-    ->middleware('auth:admin')
-    ->name('product.add');
+Route::get('/invoice', [CartController::class, 'invoiceGen'])
+    ->name('invoice.generate')
+    ->middleware('auth');
 
-Route::post('/sweets', [ProductController::class, 'store'])
-    ->name('product.store')
-    ->middleware('auth:admin');
-
-Route::put('/sweets/{product}', [ProductController::class, 'update'])->name('product.update')->middleware('auth:admin');
-
-Route::delete('/sweets/{product}', [ProductController::class, 'destroy'])
-    ->middleware('auth:admin')
-    ->name('product.destroy');
-
+Route::post('/checkout', [CartController::class, 'checkout'])
+    ->name('checkout')
+    ->middleware('auth');
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
     ->middleware('guest')
@@ -50,9 +40,8 @@ Route::post('/register', [RegisteredUserController::class, 'store'])
     ->middleware('guest');
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->middleware(['auth:web,admin'])
+    ->middleware('auth')
     ->name('logout');
-
 
     Route::get('/forgot-password', [ForgotPasswordController::class, 'create'])
     ->middleware('guest')

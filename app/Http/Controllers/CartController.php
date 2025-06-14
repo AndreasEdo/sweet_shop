@@ -32,6 +32,8 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
+        \Log::info('Add to cart request user:', ['user' => auth()->user()]);
+        \Log::info('Request data:', $request->all());
         $validated = $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1'
@@ -53,15 +55,23 @@ class CartController extends Controller
             ]);
         }
 
-        return redirect()->route('home_page')->with('success', 'Product added to cart successfully!');
+        return redirect()->back()->with('success', 'Product added to cart successfully!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Cart $cart)
+    public function show()
     {
-        //
+        $user = auth()->user();
+
+        $cartItems = Cart::with('product')->where('user_id', $user->id)->get();
+
+        $totalPrice = $cartItems->sum(function ($item) {
+            return $item->product->price * $item->quantity;
+        });
+
+        return view('cart.show', compact('cartItems', 'totalPrice'));
     }
 
     /**
@@ -87,4 +97,66 @@ class CartController extends Controller
     {
         //
     }
+
+    public function invoiceGen(Request $request)
+    {
+        $user = auth()->user();
+        $cartItems = Cart::with('product')->where('user_id', $user->id)->get();
+
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('cart.show')->with('error', 'Your cart is empty.');
+        }
+
+        $total = $cartItems->sum(function ($item) {
+            return $item->product->price * $item->quantity;
+        });
+
+        return view('invoice.show', [
+            'cartItems' => $cartItems,
+            'total' => $total,
+            'user' => $user
+        ]);
+    }
+
+    public function checkout(Request $request)
+    {
+        // \Log::info('invoiceGen accessed', [
+        //     'user_id' => auth()->id(),
+        //     'session_id' => session()->getId(),
+        //     'auth_check' => auth()->check(),
+        // ]);
+        $user = auth()->user();
+
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        $cartItems = Cart::with('product')->where('user_id', $user->id)->get();
+
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('cart.show')->with('error', 'Keranjang Anda kosong.');
+        }
+
+        $total = $cartItems->sum(function ($item) {
+            return $item->product->price * $item->quantity;
+        });
+
+
+        if ($user->money < $total) {
+            return redirect()->route('cart.show')->with('error', 'Saldo Anda tidak mencukupi untuk checkout.');
+        }
+
+
+        $user->money -= $total;
+        $user->save();
+
+        Cart::where('user_id', $user->id)->delete();
+
+        return redirect()->route('products.index')->with('success', 'Checkout berhasil! Terima kasih atas pesanan Anda.');
+    }
+
+
+
+
+
 }
