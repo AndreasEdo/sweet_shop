@@ -14,11 +14,43 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::latest()->paginate(5);
-        return view('/admin/index', ['products' =>  $products]);
+        $query = Product::query();
+
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('description', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+
+        switch ($request->get('sort')) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+
+        $products = $query->paginate(5)->appends($request->query());
+
+
+        $allTypes = Product::select('type')->distinct()->pluck('type');
+
+        return view('admin.index', compact('products', 'allTypes'));
     }
+
 
     public function showProducts(Request $request)
     {
@@ -54,7 +86,7 @@ class ProductController extends Controller
         $groupedProducts = $products->groupBy('type');
         $allTypes = Product::select('type')->distinct()->pluck('type');
 
-        return view('products.index', compact('groupedProducts', 'allTypes'));
+        return view('sweets.index', compact('groupedProducts', 'allTypes'));
     }
 
 
@@ -105,7 +137,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return view('products.show', compact('product'));
+        return view('sweets.show', compact('product'));
     }
 
     /**

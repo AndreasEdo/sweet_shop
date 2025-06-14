@@ -18,7 +18,7 @@ return new class extends Migration
             $table->bigInteger('price');
             $table->integer('stock');
             $table->string('type', 40);
-            $table->string('image', 255);
+            $table->string('image', 255)->nullable();
             $table->timestamps();
         });
     }

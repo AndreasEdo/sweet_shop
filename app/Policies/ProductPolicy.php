@@ -2,64 +2,63 @@
 
 namespace App\Policies;
 
+use App\Models\Admin;
 use App\Models\Product;
-use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ProductPolicy
 {
     /**
-     * Determine whether the user can view any models.
+     * Determine whether the admin can view any products.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(Admin $admin): bool
+    {
+        return true;
+    }
+
+    /**
+     * Determine whether the admin can view the product.
+     */
+    public function view(Admin $admin, Product $product): bool
+    {
+        return true;
+    }
+
+    /**
+     * Determine whether the admin can create products.
+     */
+    public function create(Admin $admin): bool
+    {
+        return true;
+    }
+
+    /**
+     * Determine whether the admin can update the product.
+     */
+    public function update(Admin $admin, Product $product): bool
+    {
+        return true;
+    }
+
+    /**
+     * Determine whether the admin can delete the product.
+     */
+    public function delete(Admin $admin, Product $product): bool
+    {
+        return true;
+    }
+
+    /**
+     * Determine whether the admin can restore the product.
+     */
+    public function restore(Admin $admin, Product $product): bool
     {
         return false;
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Determine whether the admin can permanently delete the product.
      */
-    public function view(User $user, Product $product): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Product $product): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Product $product): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Product $product): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Product $product): bool
+    public function forceDelete(Admin $admin, Product $product): bool
     {
         return false;
     }

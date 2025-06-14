@@ -58,8 +58,6 @@
         window.cartAddRoute = "{{ route('cart.add') }}";
         window.csrfToken = "{{ csrf_token() }}";
 
-        // --- Data Produk dari Blade ke JS ---
-        // Flatten groupedProducts ke array produk dengan tipe sebagai properti
         const products = [
             @foreach ($groupedProducts as $type => $prods)
                 @foreach ($prods as $product)
@@ -69,21 +67,21 @@
                     type: @json($type),
                     price: {{ $product->price }},
                     image: @json(asset('storage/' . $product->image)),
-                    favorites: 25, // statis sesuai contoh
+                    favorites: 25,
                     description: "Anniversary, Valentine's Day, Mother's Day, surprise gift, or any other loving moment.",
-                    // Tambahan lain jika perlu
+
                 },
                 @endforeach
             @endforeach
         ];
 
-        // Elemen DOM
+
         const searchInput = document.getElementById('searchInput');
         const filterType = document.getElementById('filterType');
         const sortSelect = document.getElementById('sortSelect');
         const productsContainer = document.getElementById('productsContainer');
 
-        // Fungsi render produk
+
         function renderProducts(data) {
             if(data.length === 0) {
                 productsContainer.innerHTML = `
@@ -93,7 +91,7 @@
                 return;
             }
 
-            // Group produk by type
+
             const grouped = data.reduce((acc, prod) => {
                 (acc[prod.type] = acc[prod.type] || []).push(prod);
                 return acc;
@@ -136,11 +134,11 @@
                                 @else
                                 <a href="{{ route('login_page') }}" class="w-full bg-[#E91E63] text-white py-3 rounded-lg font-semibold text-center hover:bg-pink-700 transition">Add To Cart</a>
                                 @endif
-                                <a href="{{ url('products') }}/${product.id}" class="w-full bg-white text-[#E91E63] py-3 rounded-lg font-semibold border-2 border-[#E91E63] text-center hover:bg-pink-50 transition">Detail Product</a>
+                                <a href="{{ url('sweets') }}/${product.id}" class="w-full bg-white text-[#E91E63] py-3 rounded-lg font-semibold border-2 border-[#E91E63] text-center hover:bg-pink-50 transition">Detail Product</a>
                             </div>
                         </div>
                     </div>
-                    `;
+                    `;  
                 });
 
                 html += `</div></section>`;
