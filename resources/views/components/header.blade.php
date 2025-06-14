@@ -8,7 +8,7 @@
   </div>
   <div class="flex items-center gap-4 md:gap-6 mt-4 md:mt-0">
     @if (auth()->check())
-        <a class="text-[#E91E63] font-bold cursor-pointer">You have {{Auth::user()->money}}$</a>
+        <a class="text-[#E91E63] font-bold cursor-pointer">You have {{ 'Rp ' . number_format(Auth::user()->money, 0, ',', '.') }}</a>
         <div class="relative group inline-block">
         <a
             href="#"
@@ -27,7 +27,7 @@
         >
             <ul class="py-2">
                 <li>
-                    <a href="#" class="block px-4 py-2 text-sm text-[#E91E63] hover:bg-pink-100 transition">Cart</a>
+                    <a href="{{route('cart.show')}}" class="block px-4 py-2 text-sm text-[#E91E63] hover:bg-pink-100 transition">Cart</a>
                 </li>
             <li>
                 <form method="POST" action="{{ route('logout') }}" id="logout-form">

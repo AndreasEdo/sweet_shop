@@ -24,29 +24,40 @@ class ProductController extends Controller
     {
         $query = Product::query();
 
-        // Handle Search functionality
+
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%')
-                  ->orWhere('description', 'like', '%' . $request->search . '%');
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('description', 'like', '%' . $request->search . '%');
+            });
         }
 
-        // Handle Sorting functionality
-        if ($request->get('sort') == 'price_asc') {
-            $query->orderBy('price', 'asc');
-        } elseif ($request->get('sort') == 'price_desc') {
-            $query->orderBy('price', 'desc');
-        } else {
-            $query->latest(); // Default to newest
+
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
         }
 
-        // Get the products and group them by their 'type'
+
+        switch ($request->get('sort')) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
         $products = $query->get();
         $groupedProducts = $products->groupBy('type');
+        $allTypes = Product::select('type')->distinct()->pluck('type');
 
-        return view('products.index', [
-            'groupedProducts' => $groupedProducts
-        ]);
+        return view('products.index', compact('groupedProducts', 'allTypes'));
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -94,7 +105,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return view('products.show', compact('product'));
     }
 
     /**

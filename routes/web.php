@@ -12,7 +12,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PromoProductController::class, 'index'])->name('home_page');
 Route::post('/cart/add', [CartController::class, 'store'])->name('cart.add')->middleware('auth');
 Route::get('/products', [ProductController::class, 'showProducts'])->name('products.index');
+Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 
+
+Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
+
+Route::get('/invoice', [CartController::class, 'invoiceGen'])
+    ->name('invoice.generate')
+    ->middleware('auth');
+
+Route::post('/checkout', [CartController::class, 'checkout'])
+    ->name('checkout')
+    ->middleware('auth');
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
     ->middleware('guest')
